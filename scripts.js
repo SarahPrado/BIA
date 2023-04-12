@@ -1,63 +1,36 @@
-let numUsuario = document.getElementById("guessClient");
-let tentativas = document.getElementById("guessTry")
+let biaNumber = Math.floor(Math.random() * 100) + 1;
+console.log("randomico: " + biaNumber)
+const guessInput = document.querySelector("#guessClient");
+const guessMensage = document.querySelector("#guessMensage");
+const guessTry = document.querySelector("#guessTry");
+let guessCount = 0;
 
-numeroRandomico= Math.floor(Math.random() * 100) + 1;
-
-function mostrarPalpite(event){
-    // alert("voce apertou uma tecla");
-    if(event.key === "Enter"){
-        //Adicionando Palpites na tela
-        if(numUsuario.value != ""){
-            let tentativas = Array(10);
-            tentativas.innerHTML += `<p>${numUsuario.value}</p>`;
-            tentativas.value = "";
-
-            //Guardando palpites em um Array
-                for(let i = 0; i <= 9 ; i++){
-                    tentativas.push(i);
-                    console.log(tentativas);
-                }
-        }else{
-            alert("digite um numero")
-        }
-    }
-}
-
-function checarPalpiteRepetido(vetorPalpites, tentativas){
-    for (var i = 0; i < vetorPalpites.length; i++) {
-        if (vetorPalpites[i] === tentativas) {
-          alert("O número " + tentativas + "já existe no array.");
-          break;
-          console.log("vetorPalpites");
-        }
+function mostrarPalpite(event) {
+  if (event.keyCode === 13) {
+    const guess = parseInt(guessInput.value);
+    if (!isNaN(guess) && guess >= 1 && guess <= 100) {
+      guessCount++;
+      guessTry.textContent += guess + " ";
+      if (guess === biaNumber) {
+        guessMensage.textContent = "Parabéns! Você acertou em " + guessCount + " tentativas.";
+        guessInput.disabled = true;
+      } else if (guess < biaNumber) {
+        guessMensage.textContent = "Seu palpite foi baixo. Tente novamente.";
+      } else {
+        guessMensage.textContent = "Seu palpite foi alto. Tente novamente.";
       }
-}
-
-function bIA(numUsuario){
-    
-    if(tentativas <= 100){
-        for(let i = 0; i <= 10; i++){
-            if(numUsuario == numeroRandomico){
-                checarPalpiteRepetido();
-                mostrarPalpite();
-                alert("Voce acertou")
-                // telaVencedora();
-            }else if(numUsuario >= numeroRandomico){
-                checarPalpiteRepetido();
-                mostrarPalpite();
-                alert("o palpite é maior")
-            }else if(numUsuario <= numeroRandomico){
-                checarPalpiteRepetido();
-                mostrarPalpite();
-                alert("o palpite é menor")
-            }else if(i = 10 && numUsuario != numeroRandomico){
-                checarPalpiteRepetido();
-                print ("Voce não conseguiu acertar, o numero era esse: " numeroRandomico);
-                // telaPerdedora()
-            }
-        }
-    }else{
-        alert("numero invalido")
+      guessInput.value = "";
+      if(guessCount >= 3 && guess != biaNumber){
+          biaNumber = Math.floor(Math.random() * 100) + 1;
+          console.log("randomico 2:" + " " + biaNumber);
+          guessCount = 0;
+          guessMensage.textContent = "Você tem direito a 10 tentivas. Jogue novamente!";
+          guessTry.textContent = "";
+          guessTry.textContent = "";
+          guessInput.disabled = false;
+      }
+    } else {
+      alert("Por favor, digite um número inteiro entre 1 e 100.");
     }
-
+  }return;
 }
